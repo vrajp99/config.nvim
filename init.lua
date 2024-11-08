@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -118,6 +118,16 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+-- Handling the removal of ^M characters when pasting into WSL on windows
+if vim.fn.has 'wsl' == 1 then
+  vim.keymap.set('n', 'p', function()
+    -- Perform the default paste action
+    local paste_txt = vim.fn.getreg '+'
+    paste_txt = string.gsub(paste_txt, '\r', '')
+    vim.fn.setreg('+', paste_txt)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('p', true, false, true), 'n', false)
+  end)
+end
 -- Enable break indent
 vim.opt.breakindent = true
 
