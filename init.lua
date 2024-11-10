@@ -118,7 +118,8 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
--- Handling the removal of ^M characters when pasting into WSL on windows
+-- Handling the removal of ^M characters when pasting into WSL.
+-- You will need to have `xclip` or `xsel` installed for the merged clipoard to work.
 if vim.fn.has 'wsl' == 1 then
   vim.keymap.set('n', 'p', function()
     -- Perform the default paste action
@@ -130,6 +131,10 @@ if vim.fn.has 'wsl' == 1 then
 end
 -- Enable break indent
 vim.opt.breakindent = true
+
+-- Set the tabs to 4 characters
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 
 -- Save undo history
 vim.opt.undofile = true
@@ -156,7 +161,7 @@ vim.opt.splitbelow = true
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '» ', trail = '·', lead = '.', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
@@ -472,7 +477,16 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      {
+        'j-hui/fidget.nvim',
+        opts = {
+          notification = {
+            window = {
+              winblend = 0,
+            },
+          },
+        },
+      },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -854,6 +868,17 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      require('tokyonight').setup {
+        style = 'storm',
+        transparent = true,
+        terminal_colors = true,
+        on_colors = function(colors) end,
+        on_highlights = function(hl, colors)
+          hl.LineNr = { fg = '#5d6aa3' }
+          hl.CursorLineNr = { fg = '#4c68e0' }
+          hl.CursorLine = { bg = '#292e42' }
+        end,
+      }
       vim.cmd.colorscheme 'tokyonight-night'
 
       -- You can configure highlights by doing something like:
