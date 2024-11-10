@@ -889,6 +889,28 @@ require('lazy').setup({
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
+  -- Add integrated terminal
+  {
+    'akinsho/toggleterm.nvim',
+    version = '*',
+    config = function()
+      require('toggleterm').setup {
+        size = 15, -- Size of terminal
+        open_mapping = [[<C-t>]], -- Default toggle key (Ctrl+\)
+        hide_numbers = true, -- Hide line numbers in terminal
+        start_in_insert = true, -- Start in insert mode
+        insert_mappings = true, -- Allow insert mode mappings
+        terminal_mappings = true, -- Enable terminal mappings
+        direction = 'horizontal', -- Terminal direction ("horizontal", "vertical", "float", "tab")
+        close_on_exit = true, -- Close terminal when process exits
+        shell = vim.o.shell, -- Use default shell
+        float_opts = {
+          border = 'double', -- Border style ("single", "double", "shadow", "curved")
+          winblend = 0, -- Transparency level
+        },
+      }
+    end,
+  },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
